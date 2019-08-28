@@ -7,9 +7,27 @@
 		//incluindo scrips
 		include('./req/DB.php');
 		include('./req/Espectador.php');
+		include('./req/Usuario.php');
 
-		//criando espectador
-		$u = new Espectador;
+
+		switch ($_POST['nivel']) {
+			
+			case 3: //criando espectador
+				$u = new Espectador();
+				break;
+
+			case 2: //criando usuario
+				$u = new Usuario();
+				break;
+
+			case 1: //criando ADM
+				$u = new ADM();
+				break;
+			
+			default:
+				die('errrou');
+				break;
+		}
 
 		//perguntando se login esta certo
 		if($u->logar($_POST['email'],$_POST['senha'])){

@@ -1,3 +1,35 @@
+<?php
+
+	include("./req/Espectador.php");
+	include("./req/DB.php");
+	include('./req/Usuario.php');
+
+	//iniciar a session
+	session_start();
+
+	//verificar se a session usuario existe
+	if($_SESSION['usuario']){
+
+		//usuario existe. recuperando usuario
+		$u = unserialize($_SESSION['usuario']);
+
+		//ler as mensagens 
+		$mensagens = $u->lerMensagens();
+
+		//echo '<pre>';
+		//var_dump($mensagens);
+		//die();
+		//echo '<pre>';
+
+	}
+	else {
+		
+	}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -50,21 +82,15 @@
 </head>
 <body>
 
-	<div class="msg propria">
+	<?php foreach ($mensagens as $m):?>
+	<div class="msg <?= ($m['email'] == $u->getEmail() ) ? 'propria' : 'alheia'; ?>">
 		<div>
-			<div class="email">teste@teste.com</div>
-			<div class="hora">09:35</div>
-			<div class="texto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque est ex dolorum cumque molestias aut iusto deserunt, nemo exercitationem qui ex.</div>
+			<div class="email"><?= $m['email']?></div>
+			<div class="hora"><?= date("h:i", strtotime($m['hora'])) ?></div> <!-- srttotime - transforma em segundo pra fazer o calculo -->
+			<div class="texto"><?= utf8_encode($m['texto'])?></div>
 		</div>
 	</div>
-
-	<div class="msg alheia">
-		<div>
-			<div class="email">teste@teste.com</div>
-			<div class="hora">09:35</div>
-			<div class="texto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque est ex dolorum cumque molestias aut iusto deserunt, nemo exercitationem qui ex.</div>
-		</div>
-	</div>
+	<?php endforeach; ?>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	<script>
